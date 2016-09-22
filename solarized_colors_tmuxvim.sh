@@ -1,7 +1,7 @@
 #!/bin/bash
 #===============================================================================
-#     File: solarized_toggle_tmuxvim.sh
-#  Created: 08/31/2016, 11:35
+#     File: solarized_colors_tmuxvim.sh
+#  Created: 09/22/2016, 15:37
 #   Author: Bernie Roesler
 #
 #  Description: Set tmux/vim to solarized light colors
@@ -19,17 +19,12 @@ fi
 
 # BSD sed requires "-i ''" (space after -i)
 # GNU sed DOES NOT take space after -i ("-i''")
-if [[ "$1" == "dark" ]]; then
+if [[ "$1" == 'dark' ||  "$1" == 'light' ]]; then
     # Set background to dark, using non-degraded 16-color mode
-    sed --follow-symlinks "/@colors-solarized/ s/'[a-z0-9]\+'/'dark'/" $HOME/.tmux.conf
-    sed -i'' --follow-symlinks "/set background=/ s/=[a-z]\+/=dark/" $HOME/.vimrc
+    sed -i'' --follow-symlinks "/@colors-solarized/ s/'[a-z0-9]\+'/'$1'/" $HOME/.tmux.conf
+    sed -i'' --follow-symlinks "/set background=/ s/=[a-z]\+/=$1/" $HOME/.vimrc
     sed -i'' --follow-symlinks "/let g:solarized_termcolors =/ s/= [0-9]\+/= 16/" $HOME/.vimrc
-elif [[ "$1" == "light" ]]; then
-    # Set background to light, using non-degraded 16-color mode
-    sed -i'' --follow-symlinks "/@colors-solarized/ s/'[a-z0-9]\+'/'light'/" $HOME/.tmux.conf
-    sed -i'' --follow-symlinks "/set background=/ s/=[a-z]\+/=light/" $HOME/.vimrc
-    sed -i'' --follow-symlinks "/let g:solarized_termcolors =/ s/= [0-9]\+/= 16/" $HOME/.vimrc
-elif [[ "$1" == "256" ]]; then
+elif [[ "$1" == '256' ]]; then
     # Set background to dark, using degraded 256-color mode
     sed -i'' --follow-symlinks "/@colors-solarized/ s/'[a-z0-9]\+'/'256'/" $HOME/.tmux.conf
     sed -i'' --follow-symlinks "/set background=/ s/=[a-z0-9]\+/=dark/" $HOME/.vimrc
