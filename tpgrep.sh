@@ -9,10 +9,10 @@
 #  vim: set ft=sh syn=sh:
 #===============================================================================
 
-if [ -z "$TMUX" ]; then 
-    echo 'Usage: tpgrep must be run inside tmux session.' 1>&2
-    exit 1
-fi
+# if [ -z "$TMUX" ]; then 
+#     echo 'Usage: tpgrep must be run inside tmux session.' 1>&2
+#     exit 1
+# fi
 
 # Declare error message function
 usage() {
