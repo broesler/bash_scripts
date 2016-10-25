@@ -1,3 +1,4 @@
+#!/bin/bash
 #===============================================================================
 #     File: tpgrep
 #  Created: 11/25/2015, 19:29
@@ -35,12 +36,16 @@ if [ "$#" -eq 0 ]; then
 fi
 
 target=''
+session_flag=0
 
 # Get arguments
-while getopts ":t:" opt; do
+while getopts ":t:s" opt; do
     case $opt in
         t)
             target="$OPTARG"
+            ;;
+        s)
+            session_flag=1
             ;;
         \?)
             echo "Invalid option: -$OPTARG" 1>&2
@@ -70,19 +75,23 @@ fi
 #-------------------------------------------------------------------------------
 #        Check for target session
 #-------------------------------------------------------------------------------
+tmux_format="#{session_name} #{pane_tty} #{session_id} #{window_id} #{pane_id}"
+
 if [ -z "$target" ]; then
     # Search ALL panes of ALL windows: pane tty, window id, pane id
     #  /dev/ttys001 $1 @5 %10 /dev/ttys002 $1 @5 %12
-    lsp=$(tmux list-panes -a \
-        -F "#{session_name} #{pane_tty} #{session_id} #{window_id} #{pane_id}")
+    lsp=$(tmux list-panes -a -F "${tmux_format}")
 else 
     # Check if target exists 
     #     suppress tmux output "can't find window..." if one is not found
     if tmux has-session -t "${target}" 2>/dev/null; then
-        # If we use 'tmux list-panes -t [target]', the target can be either
-        # a session name/id or a window name/id. tmux will determine which it is.
-        lsp=$(tmux list-panes -t "${target}" \
-            -F "#{session_name} #{pane_tty} #{session_id} #{window_id} #{pane_id}")
+        if [ "$session_flag" -eq 1 ]; then
+            tmux_com="tmux list-panes -s -t"
+        else
+            tmux_com="tmux list-panes -t"
+        fi
+        # NOTE no quotes on tmux_com so it is not taken as a single command
+        lsp=$($tmux_com "${target}" -F "${tmux_format}")
     else
         # target session/window not found!
         exit 1
