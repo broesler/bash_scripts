@@ -9,19 +9,18 @@
 #  Description: "[tm]ux [s]witch" switches to the tmux session:window.pane
 #  vim: set ft=sh syn=sh:
 #===============================================================================
-if [ "$#" -gt 0 ]; then
-    # TODO: insert argument checking to ensure $1:@1.%1 format...
-    tmuxswp="$1"
 
-    # Switch to session first, then window, then pane
-    tmux switch -t "$tmuxswp" && \
-    tmux select-window -t "$tmuxswp" && \
-    tmux select-pane -t "$tmuxswp"
-
-else
+if [ "$#" -eq 0 ]; then
     echo "Usage: tms \$session:@window.%pane" 1>&2
     exit 0
 fi
+
+tmuxswp="$1"
+
+# Switch to session first, then window, then pane
+tmux switch -t "$tmuxswp" && \
+    tmux select-window -t "$tmuxswp" && \
+    tmux select-pane -t "$tmuxswp"
 
 exit 0
 #===============================================================================
