@@ -24,14 +24,11 @@ if [[ "$1" == 'dark' ||  "$1" == 'light' ]]; then
     sed -i'' --follow-symlinks "/@colors-solarized/ s/'[a-z0-9]\+'/'$1'/" $HOME/.tmux.conf
     sed -i'' --follow-symlinks "/set background=/ s/=[a-z]\+/=$1/" $HOME/.vimrc
     sed -i'' --follow-symlinks "/let g:solarized_termcolors =/ s/= [0-9]\+/= 16/" $HOME/.vimrc
-    itp="Solarized${1^}"
-
 elif [[ "$1" == '256' ]]; then
     # Set background to dark, using degraded 256-color mode
     sed -i'' --follow-symlinks "/@colors-solarized/ s/'[a-z0-9]\+'/'256'/" $HOME/.tmux.conf
     sed -i'' --follow-symlinks "/set background=/ s/=[a-z0-9]\+/=dark/" $HOME/.vimrc
     sed -i'' --follow-symlinks "/let g:solarized_termcolors =/ s/= [0-9]\+/= 256/" $HOME/.vimrc
-    itp="LaterThisEvening"
 else
     usage
 fi
@@ -40,7 +37,6 @@ fi
 if [ -n "$TMUX" ]; then
     tmux source-file $HOME/.tmux.conf
 fi
-iterm_prof "$itp"
 
 #===============================================================================
 #===============================================================================
