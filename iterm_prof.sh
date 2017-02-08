@@ -7,6 +7,11 @@
 #  Description: Set profile used in iTerm2
 #
 #===============================================================================
+if [[ "$TERM_PROGRAM" != 'iTerm.app' ]]; then
+    printf "Usage: Profile switching not available outside of iTerm.app.\n" 1>&2
+    exit 1
+fi
+
 iterm_cmd="\e]1337;SetProfile=${1}\a"
 
 # Apply change
