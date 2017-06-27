@@ -19,7 +19,7 @@ then
     exit 1
 fi
 
-SVFILE="${HOME}/bash_scripts/skimvim.vim"
+SVFILE="${HOME}/src/bash/skimvim.vim"
 
 # Extract arguments
 file="$1"

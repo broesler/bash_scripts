@@ -13,6 +13,8 @@ files=(*.sh)
 # Full path to this script (and scripts to be symlinked)
 script_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P )
 
+# TODO without "force" flag, just create links for files that do not already exist
+
 # symlink files, do not follow symbolic links that already exist (i.e. directories)
 if [ "$1" == "-f" ]; then
     opts="-nsvf"            # force link creation
