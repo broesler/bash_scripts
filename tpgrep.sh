@@ -10,7 +10,7 @@
 #  vim: set ft=sh syn=sh:
 #===============================================================================
 
-# if [ -z "$TMUX" ]; then 
+# if [ -z "$TMUX" ]; then
 #     echo 'Usage: tpgrep must be run inside tmux session.' 1>&2
 #     exit 1
 # fi
@@ -19,8 +19,11 @@
 usage() {
     local this_pane=$(tmux display-message -p \
         -F "#{session_id}:#{window_id}.#{pane_id}")
-    echo "Usage: tpgrep [-t target-session] [pattern]" 1>&2
-    echo "Current pane: ${this_pane}" 1>&2
+    echo "Usage: tpgrep [-t target-session] [pattern]"            1>&2
+    echo "  tpgrep uses 'grep -sE [pattern]' to perform searches" 1>&2
+    echo "  'tpgrep me' returns the current pane."                1>&2
+    echo "  Current pane: ${this_pane}"                           1>&2
+    exit 1
 }
 
 # Check if array contains element, takes 2 arguments "test_string" "${arr[@]}"
@@ -32,15 +35,17 @@ containsElement() {
 
 if [ "$#" -eq 0 ]; then
     usage
-    exit 2
 fi
 
 target=''
 session_flag=0
 
 # Get arguments
-while getopts ":t:s" opt; do
+while getopts ":h:t:s" opt; do
     case $opt in
+        h)
+            usage
+            ;;
         t)
             target="$OPTARG"
             ;;
@@ -50,18 +55,16 @@ while getopts ":t:s" opt; do
         \?)
             echo "Invalid option: -$OPTARG" 1>&2
             usage
-            exit 1
             ;;
         :)
             usage
-            exit 1
             ;;
     esac
 done
 
 # shift the arguments to skip over the options to the real arguments (NOT
 # including those assigned by $OPTARG above)
-shift $((OPTIND-1))     
+shift $((OPTIND-1))
 args="$@"
 
 # grep pattern, ignore all other arguments
@@ -69,7 +72,6 @@ tpg_pat="$1"
 
 if [ -z "$tpg_pat" ]; then
     usage
-    exit 1
 fi
 
 #-------------------------------------------------------------------------------
@@ -81,8 +83,8 @@ if [ -z "$target" ]; then
     # Search ALL panes of ALL windows: pane tty, window id, pane id
     #  /dev/ttys001 $1 @5 %10 /dev/ttys002 $1 @5 %12
     lsp=$(tmux list-panes -a -F "${tmux_format}")
-else 
-    # Check if target exists 
+else
+    # Check if target exists
     #     suppress tmux output "can't find window..." if one is not found
     if tmux has-session -t "${target}" 2>/dev/null; then
         if [ "$session_flag" -eq 1 ]; then
@@ -100,17 +102,17 @@ fi
 
 # read ttys, windows, panes into arrays
 sessname=( $(echo "$lsp" | \grep -o '^[^ ]*') )
-panetty=( $(echo "$lsp" | \grep -io 'tty.[0-9]\{3\}') )
-sessid=( $(echo "$lsp" | \grep -o '\$[0-9]\+') )
+panetty=(  $(echo "$lsp" | \grep -io 'tty.[0-9]\{3\}') )
+sessid=(   $(echo "$lsp" | \grep -o '\$[0-9]\+') )
 windowid=( $(echo "$lsp" | \grep -o '@[0-9]\+') )
-paneid=( $(echo "$lsp" | \grep -o '%[0-9]\+') )
+paneid=(   $(echo "$lsp" | \grep -o '%[0-9]\+') )
 
 # Build ps command to only list tty's in tmux
 i=1
 for pane in ${panetty[@]}; do
     pat+=" -t $pane"
     let i++
-done 
+done
 
 # grep for process running in one of the pane ttys
 test=$(ps $pat | sed 1,1d | \grep -sE "$tpg_pat")
@@ -123,7 +125,7 @@ test=$(ps $pat | sed 1,1d | \grep -sE "$tpg_pat")
 # NOTE: if there are multiple instances of a process, tpgrep will find the
 # tty with the *lowest* number, presumably the earliest-launched instance
 if [ -n "$test" ]; then
-    # array of ttys 
+    # array of ttys
     mtty=( $(echo "$test" | \grep -io "tty.[0-9]\{3\}") )
 
     # find array index matching mtty
