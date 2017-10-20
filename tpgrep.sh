@@ -115,15 +115,16 @@ for pane in ${panetty[@]}; do
 done
 
 # grep for process running in one of the pane ttys
-test=$(ps $pat | sed 1,1d | \grep -sE "$tpg_pat")
+test=$(ps $pat | sed 1d | \grep -sE "$tpg_pat")
 
-# NOTE: could possibly pgrep for PID. Need to match up to list of ttys. This
+# NOTE could possibly pgrep for PID. Need to match up to list of ttys. This
 # line returns PID if tmux has the process, or empty string otherwise:
 # test=$(pgrep -i $pat "$tpg_pat")
 
 # extract tty of pane running process
-# NOTE: if there are multiple instances of a process, tpgrep will find the
+# NOTE if there are multiple instances of a process, tpgrep will find the
 # tty with the *lowest* number, presumably the earliest-launched instance
+# TODO return entire list of matches, and let user decide what to do with them
 if [ -n "$test" ]; then
     # array of ttys
     mtty=( $(echo "$test" | \grep -io "tty.[0-9]\{3\}") )
