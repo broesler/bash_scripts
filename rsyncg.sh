@@ -31,9 +31,10 @@ elif [ -r "$HOME/.gitignore_global" ]; then
 fi
 
 # NOTE the order of "exclude"s and "include"s DOES matter!! See 'man rsync'.
-# [c]hecksum of files, [r]ecursive, preserve sym[l]inks, preserve [t]imestamp,
-# [v]erbose, [z]ip files, and show [stats] at end of run
-rsync -crltvz --stats     \
+# [c]hecksum of files, [r]ecursive, preserve sym[l]inks, prune e[m]pty
+# directories, preserve [t]imestamp, [v]erbose, [z]ip files, and show [stats] at
+# end of run
+rsync -crlmtvz --stats     \
     --exclude='*.DS_Store' \
     --exclude='*Icon*'     \
     --exclude='.git/'      \
