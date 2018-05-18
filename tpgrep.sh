@@ -19,10 +19,9 @@
 usage() {
     local this_pane=$(tmux display-message -p \
         -F "#{session_id}:#{window_id}.#{pane_id}")
-    echo "Usage: tpgrep [-t target-session] [pattern]"            1>&2
-    echo "  tpgrep uses 'grep -sE [pattern]' to perform searches" 1>&2
-    echo "  'tpgrep me' returns the current pane."                1>&2
-    echo "  Current pane: ${this_pane}"                           1>&2
+    echo "Usage: tpgrep [-sv] [-t TARGET-SESSION] PATTERN"      1>&2
+    echo "  tpgrep uses 'grep -sE PATTERN' to perform searches" 1>&2
+    echo "  Current pane: ${this_pane}"                         1>&2
     exit 1
 }
 
@@ -39,9 +38,10 @@ fi
 
 target=''
 session_flag=0
+verbose_flag=0
 
 # Get arguments
-while getopts ":h:t:s" opt; do
+while getopts ":ht:sv" opt; do
     case $opt in
         h)
             usage
@@ -51,6 +51,9 @@ while getopts ":h:t:s" opt; do
             ;;
         s)
             session_flag=1
+            ;;
+        v)
+            verbose_flag=1
             ;;
         \?)
             echo "Invalid option: -$OPTARG" 1>&2
@@ -114,12 +117,12 @@ for pane in ${panetty[@]}; do
     let i++
 done
 
-# grep for process running in one of the pane ttys
-test=$(ps $pat | sed 1d | \grep -sE "$tpg_pat")
+# grep for process running in one of the pane ttys, ignore grep itself!!
+test=$(ps $pat | sed 1d | \grep -sE "$tpg_pat" | grep -v grep)
 
-# NOTE could possibly pgrep for PID. Need to match up to list of ttys. This
-# line returns PID if tmux has the process, or empty string otherwise:
-# test=$(pgrep -i $pat "$tpg_pat")
+if [ "$verbose_flag" -eq 1 ]; then
+    echo "$test"
+fi
 
 # extract tty of pane running process
 # NOTE if there are multiple instances of a process, tpgrep will find the
