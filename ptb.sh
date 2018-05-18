@@ -24,18 +24,13 @@ tmuxswp="$1"
 
 # Copy ipython pane to current pane's stdout for parsing
 # sed steps:
-#   - Find "Traceback" line
-#   - Set label :1
-#   - Until we find a prompt ('>>>'), add next line to pattern space, and then
-#     replace hold space with pattern space (gets last occurrence of Traceback)
-#   - When end of file reached, exchange hold and pattern space, and print
+#   - On "Traceback" lines replace hold space with pattern space
+#   - On non-empty lines, append to hold space
+#   - When end of file reached, exchange hold and pattern space, print
 #   - delete all other lines
 # Finally, remove last line, leaving just the Traceback message!
-output=$(tmux capture-pane -t "$tmuxswp"  -p \
-    | sed '/Traceback/{:1;/>>>/!{N;b1};h};${x;p};d' \
-    | sed '$d')
-
-echo "$output"
+tpane=$(tmux capture-pane -t "$tmuxswp" -p)
+echo "$tpane" | sed '/Traceback/h;//!H;${x;p};d' | sed '$d'
 
 exit 0
 #===============================================================================
