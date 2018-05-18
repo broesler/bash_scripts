@@ -11,6 +11,7 @@ rm -f *.out
 rm -f *.toc
 rm -f *.fls
 rm -f *.xdv
+rm -f *.spl
 rm -f *.fdb_latexmk
 rm -f *.synctex*.gz
 rm -f *.run.xml

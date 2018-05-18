@@ -11,6 +11,9 @@
 usage ()
 {
     printf "%s\n" "Usage: $(basename $0) [OPTION] SRC [SRC] DEST"\
+                  '       rsyncg uses: -crlmtvz --stats [OPTION],'\
+                  '       ignores the .git directory, and includes any files'\
+                  '       that are ignored by git.'\
                   "   See 'man rsync' for more options." 1>&2
     exit 1
 }
@@ -47,7 +50,7 @@ fi
 # [c]hecksum of files, [r]ecursive, preserve sym[l]inks, prune e[m]pty
 # directories, preserve [t]imestamp, [v]erbose, [z]ip files, and show [stats] at
 # end of run
-rsync -crlmtvz --stats     \
+rsync -rlmtvz --stats     \
     --exclude='*.DS_Store' \
     --exclude='*Icon*'     \
     --exclude='.git/'      \

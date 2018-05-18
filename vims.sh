@@ -1,7 +1,9 @@
 #!/bin/bash
-# vim with server (only for LaTeX + Skim really)
+# vim with server (for LaTeX + Skim use)
 test=$(command vim --version | grep -w clientserver)
 if [ "$test" ]; then
+    servers=( $(command vim --serverlist) )
+
     if [ $# -eq 0 ]; then
         # No need to issue a remote command for no filename
         command vim --servername VIM
