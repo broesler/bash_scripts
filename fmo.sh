@@ -6,7 +6,6 @@
 #
 #  Description: [f]ormat [m]atlab [o]utput (when running in non-graphics mode)
 #
-#  vim: set ft=sh syn=sh tw=80:
 #===============================================================================
 
 if [ -z "$TMUX" ]; then
@@ -21,11 +20,6 @@ fi
 
 # Take first argument as pane
 tmuxswp="$1"
-
-# Ensure Matlab has printed all commands (a bit hacky...)
-# TODO check that last line of "tmux capture-pane..." is ">>" in case of
-#   long-running programs
-sleep 0.1
 
 # Copy matlab pane to current pane's stdout for parsing
 # Steps:
