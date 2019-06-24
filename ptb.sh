@@ -41,7 +41,8 @@ fi
 #   - When end of file reached, exchange hold and pattern space, print
 #   - all other lines, delete pattern space (current line only)
 # Finally, remove last line, leaving just the Traceback message!
-tpane=$(tmux capture-pane -t "$tmuxswp" -p)
+# Capture up to 32,768 lines of the buffer
+tpane=$(tmux capture-pane -S -32768 -t "$tmuxswp" -p)
 if [ -z "$endpat" ]; then
     echo "$tpane" | sed '/Traceback/h;//!H;${x;p};d' | sed '$d'
 else

@@ -16,7 +16,8 @@ else
     n=10
 fi
 
-# set the internal field spereator to line break, so that we can iterate easily over the verify-pack output
+# set the internal field spereator to line break, so that we can iterate easily
+# over the verify-pack output
 IFS=$'\n';
 
 # list all objects including their size, sort by size, take top 10

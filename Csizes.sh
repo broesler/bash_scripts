@@ -8,12 +8,13 @@
 #
 #===============================================================================
 binary=$(mktemp)
-cat <<\EOF | gcc-7 -o $binary -x c -
+cat <<\EOF | gcc-8 -o $binary -x c -
 #include <stdio.h>
 int main() {
-    printf("char  = %lu bytes\n", sizeof(char));
-    printf("int   = %lu bytes\n", sizeof(int));
-    printf("long  = %lu bytes\n", sizeof(long));
+    printf("char   = %lu bytes\n", sizeof(char));
+    printf("int    = %lu bytes\n", sizeof(int));
+    printf("long   = %lu bytes\n", sizeof(long));
+    printf("long long = %llu bytes\n", sizeof(unsigned long long));
 }
 EOF
 $binary

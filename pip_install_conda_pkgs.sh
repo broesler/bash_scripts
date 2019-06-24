@@ -12,6 +12,7 @@ pkg_file="$HOME/src/bash/conda_pkgs.txt"
 
 while read -r pkg || [ -n "$pkg" ]; do
     pip3 install --upgrade "$pkg"
+    # pip3 uninstall -y "$pkg"
 done < "$pkg_file"
 #===============================================================================
 #===============================================================================

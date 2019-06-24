@@ -118,7 +118,6 @@ pep8
 pexpect
 pickleshare
 pillow
-pip
 ply
 prompt_toolkit
 protobuf
