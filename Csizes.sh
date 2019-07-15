@@ -8,7 +8,7 @@
 #
 #===============================================================================
 binary=$(mktemp)
-cat <<\EOF | gcc-8 -o $binary -x c -
+cat <<\EOF | gcc-9 -o $binary -x c -
 #include <stdio.h>
 int main() {
     printf("char   = %lu bytes\n", sizeof(char));
