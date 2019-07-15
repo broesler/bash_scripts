@@ -11,8 +11,8 @@
 usage ()
 {
     printf "%s\n" "Usage: $(basename $0) [OPTION] SRC [SRC] DEST"\
-                  '       rsyncg uses: -crlmtvz --stats [OPTION],'\
-                  '       ignores the .git directory, and includes any files'\
+                  '       rsyncg uses: -rlmtvz --stats [OPTION],'\
+                  '       ignores the .git directory, but includes any files'\
                   '       that are ignored by git.'\
                   "   See 'man rsync' for more options." 1>&2
     exit 1
@@ -38,6 +38,9 @@ fi
 if [ -r "$HOME/.gitignore_global" ]; then
     gitig+=("--include-from=$HOME/.gitignore_global")
 fi
+
+# TODO add option for rsyncg to include additional files (needs to be inserted
+# BEFORE --exclude=*).
 
 # If we're using a gitignore, exclude all the other files in the directory
 # NOTE the '*' does not get expanded by the double quotes below. A second set of
