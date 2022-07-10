@@ -80,7 +80,7 @@ fi
 #-------------------------------------------------------------------------------
 #        Check for target session
 #-------------------------------------------------------------------------------
-tmux_format="#{session_name} #{pane_tty} #{session_id} #{window_id} #{pane_id}"
+tmux_format="#{pane_tty} #{session_id} #{window_id} #{pane_id}"
 
 if [ -z "$target" ]; then
     # Search ALL panes of ALL windows: pane tty, window id, pane id
@@ -104,11 +104,10 @@ else
 fi
 
 # read ttys, windows, panes into arrays
-sessname=( $(echo "$lsp" | \grep -o '^[^ ]*') )
-panetty=(  $(echo "$lsp" | \grep -io 'tty.[0-9]\{3\}') )
-sessid=(   $(echo "$lsp" | \grep -o '\$[0-9]\+') )
-windowid=( $(echo "$lsp" | \grep -o '@[0-9]\+') )
-paneid=(   $(echo "$lsp" | \grep -o '%[0-9]\+') )
+panetty=(  $( echo "$lsp" | awk '{print $1}') )
+sessid=(   $( echo "$lsp" | awk '{print $2}') )
+windowid=( $( echo "$lsp" | awk '{print $3}') )
+paneid=(   $( echo "$lsp" | awk '{print $4}') )
 
 # Build ps command to only list tty's in tmux
 i=1
