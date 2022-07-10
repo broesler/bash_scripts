@@ -25,12 +25,6 @@ usage() {
     exit 1
 }
 
-# Check if array contains element, takes 2 arguments "test_string" "${arr[@]}"
-containsElement() {
-    local e
-    for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
-    return 1
-}
 
 if [ "$#" -eq 0 ]; then
     usage
@@ -129,15 +123,17 @@ fi
 # TODO return entire list of matches, and let user decide what to do with them
 if [ -n "$test" ]; then
     # array of ttys
-    mtty=( $(echo "$test" | \grep -io "tty.[0-9]\{3\}") )
+    mtty=( $(echo "$test" | awk '{print $2}') )
 
     # find array index matching mtty
     i=0
     for k in ${panetty[@]}; do
-        if containsElement "$k" "${mtty[@]}"; then
-            ind=$i
-            break
-        fi
+        for m in "${mtty[@]}"; do 
+            if [[ $k == *"$m"* ]]; then
+                ind=$i
+                break 2
+            fi
+        done
         let i+=1
     done
 
