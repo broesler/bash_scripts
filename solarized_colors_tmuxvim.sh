@@ -21,7 +21,8 @@ if [[ "$1" == 'dark' ||  "$1" == 'light' ]]; then
     # Set background to (dark|light), using non-degraded 16-color mode
     tmux_cval=$1
     vim_cval=$1
-    ncol=16
+    # ncol=16
+    ncol=256  # Only on WINDOWS WSL2!!
 elif [[ "$1" == '256' ]]; then
     # Set background to dark, using degraded 256-color mode
     tmux_cval=256
@@ -41,6 +42,9 @@ sed -i'' --follow-symlinks "/let g:solarized_termcolors =/ s/= [0-9]\+/= ${ncol}
 if [ -n "$TMUX" ]; then
     tmux source-file $HOME/.tmux.conf
 fi
+
+# Also edit the Windows Terminal Ubuntu-22.04 profile's current colorscheme
+python "$HOME/src/bash_scripts/edit_wintermprof.py" "$1"
 
 #===============================================================================
 #===============================================================================
