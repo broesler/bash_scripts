@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 #===============================================================================
 #     File: solarized_colors_tmuxvim.sh
 #  Created: 09/22/2016, 15:37

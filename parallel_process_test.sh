@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 #===============================================================================
 #     File: parallel_process_test.sh
 #  Created: 02/15/2017, 15:25

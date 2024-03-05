@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Recent history (show command number and command, exclude time)
 # number of commands to print
 if (($#)); then

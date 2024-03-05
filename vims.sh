@@ -1,6 +1,6 @@
 #!/bin/bash
 # vim with server (for LaTeX + Skim use)
-test=$(command vim --version | grep -w clientserver)
+test=$(command vim --version | grep -w '\+clientserver')
 if [ "$test" ]; then
     servers=( $(command vim --serverlist) )
 
