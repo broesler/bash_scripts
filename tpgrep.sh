@@ -25,12 +25,6 @@ usage() {
     exit 1
 }
 
-# Check if array contains element, takes 2 arguments "test_string" "${arr[@]}"
-containsElement() {
-    local e
-    for e in "${@:2}"; do [[ "$e" == "$1" ]] && return 0; done
-    return 1
-}
 
 if [ "$#" -eq 0 ]; then
     usage
@@ -80,7 +74,7 @@ fi
 #-------------------------------------------------------------------------------
 #        Check for target session
 #-------------------------------------------------------------------------------
-tmux_format="#{session_name} #{pane_tty} #{session_id} #{window_id} #{pane_id}"
+tmux_format="#{pane_tty} #{session_id} #{window_id} #{pane_id}"
 
 if [ -z "$target" ]; then
     # Search ALL panes of ALL windows: pane tty, window id, pane id
@@ -104,11 +98,10 @@ else
 fi
 
 # read ttys, windows, panes into arrays
-sessname=( $(echo "$lsp" | \grep -o '^[^ ]*') )
-panetty=(  $(echo "$lsp" | \grep -io 'tty.[0-9]\{3\}') )
-sessid=(   $(echo "$lsp" | \grep -o '\$[0-9]\+') )
-windowid=( $(echo "$lsp" | \grep -o '@[0-9]\+') )
-paneid=(   $(echo "$lsp" | \grep -o '%[0-9]\+') )
+panetty=(  $( echo "$lsp" | awk '{print $1}') )
+sessid=(   $( echo "$lsp" | awk '{print $2}') )
+windowid=( $( echo "$lsp" | awk '{print $3}') )
+paneid=(   $( echo "$lsp" | awk '{print $4}') )
 
 # Build ps command to only list tty's in tmux
 i=1
@@ -130,15 +123,17 @@ fi
 # TODO return entire list of matches, and let user decide what to do with them
 if [ -n "$test" ]; then
     # array of ttys
-    mtty=( $(echo "$test" | \grep -io "tty.[0-9]\{3\}") )
+    mtty=( $(echo "$test" | awk '{print $2}') )
 
     # find array index matching mtty
     i=0
     for k in ${panetty[@]}; do
-        if containsElement "$k" "${mtty[@]}"; then
-            ind=$i
-            break
-        fi
+        for m in "${mtty[@]}"; do 
+            if [[ $k == *"$m"* ]]; then
+                ind=$i
+                break 2
+            fi
+        done
         let i+=1
     done
 
