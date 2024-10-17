@@ -11,14 +11,14 @@ binary=$(mktemp)
 cat <<\EOF | clang -o $binary -x c -
 #include <stdio.h>
 int main() {
-    printf("char   = %lu bytes\n", sizeof(char));
-    printf("short  = %lu bytes\n", sizeof(short));
-    printf("int    = %lu bytes\n", sizeof(int));
-    printf("long   = %lu bytes\n", sizeof(long));
-    printf("long long = %lu bytes\n", sizeof(long long));
-    printf("float  = %lu bytes\n", sizeof(float));
-    printf("double = %lu bytes\n", sizeof(double));
-    printf("long double = %lu bytes\n", sizeof(long double));
+    printf("char        = %lu bytes = %lu bits\n",   sizeof(char),          8*sizeof(char));
+    printf("short       = %lu bytes = %lu bits\n",   sizeof(short),         8*sizeof(short));
+    printf("int         = %lu bytes = %lu bits\n",   sizeof(int),           8*sizeof(int));
+    printf("long        = %lu bytes = %lu bits\n",   sizeof(long),          8*sizeof(long));
+    printf("long long   = %lu bytes = %lu bits\n",   sizeof(long long),     8*sizeof(long long));
+    printf("float       = %lu bytes = %lu bits\n",   sizeof(float),         8*sizeof(float));
+    printf("double      = %lu bytes = %lu bits\n",   sizeof(double),        8*sizeof(double));
+    printf("long double = %lu bytes = %lu bits\n",   sizeof(long double),   8*sizeof(long double));
 }
 EOF
 $binary
